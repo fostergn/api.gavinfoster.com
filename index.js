@@ -5,10 +5,10 @@
 // check if admin is connected
 // if not, then send SMS message
 
-var firebase = require('firebase');
 var twilioConfig = require('./twilioConfig');
 var twilioClient = require('twilio')(twilioConfig.accountSid, twilioConfig.authToken);
 var express = require('express');
+var db = require('./firebaseConfig');
 var app = express();
 var bodyParser = require('body-parser')
 
@@ -18,18 +18,7 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 var conversationId = '';
 
-const config = {
-  apiKey: "AIzaSyCOj3piZf-HrV-WjDy30WlY_F7rCLqCIAk",
-  authDomain: "portfoliochat-c02b2.firebaseapp.com",
-  databaseURL: "https://portfoliochat-c02b2.firebaseio.com",
-  storageBucket: "portfoliochat-c02b2.appspot.com",
-  messagingSenderId: "500384902525"
-};
-
 let firstMessageLoaded = false;
-
-firebase.initializeApp(config);
-const db = firebase.database();
 
 // Get conversations
 db.ref('messages')
