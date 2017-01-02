@@ -8,6 +8,15 @@
 var firebase = require('firebase');
 var twilioConfig = require('./twilioConfig');
 var twilioClient = require('twilio')(twilioConfig.accountSid, twilioConfig.authToken);
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 8080;
+var conversationId = '';
 
 const config = {
   apiKey: "AIzaSyCOj3piZf-HrV-WjDy30WlY_F7rCLqCIAk",
@@ -29,8 +38,11 @@ db.ref('messages')
   .on('child_added', function(data) {
   if(!firstMessageLoaded){firstMessageLoaded = true; return;}
 
-  const conversationId = data.val().conversationId;
+  conversationId = data.val().conversationId;
   const messageText = data.val().message;
+  const messageAuthor = data.val().author;
+
+  if(messageAuthor === 'admin'){return;}
 
   // check if admin is active
   db.ref('conversations/' + conversationId)
@@ -38,7 +50,6 @@ db.ref('messages')
     .then(function(conversation) {
       const isAdminConnected = conversation.val().isAdminConnected;
       if(!isAdminConnected){
-        console.log('send gavin a text message : ', messageText);
         sendMessage(messageText);
       }
     });
@@ -51,9 +62,50 @@ function sendMessage(msg){
       body: msg
   }, function(err, responseData) { //this function is executed when a response is received from Twilio
       if(err){console.log('error: ', err)}
-      if (!err) { // "err" is an error received during the request, if any
-          console.log(responseData.from); // outputs "+14506667788"
-          console.log(responseData.body); // outputs "word to your mother."
-      }
   });
 }
+
+function addMessageToFirebase(message){
+  sendWithConversationId(function(conversationId){
+    db.ref('messages').push({
+      author: 'admin',
+      message,
+      conversationId,
+      createdOn: Date.now(),
+    }, function(){
+      console.log('success');
+    })
+  })
+}
+
+function sendWithConversationId(cb){
+  // if conversation id hasn't been set
+  if (conversationId === ''){
+    db.ref('messages')
+      .orderByChild('createdOn')
+      .limitToLast(1)
+      .once('value')
+      .then(function(messages) {
+        messages.forEach(function(message) {
+          conversationId = message.val().conversationId;
+          cb(conversationId);
+        });
+      });
+  } else {
+    cb(conversationId);
+  }
+}
+
+// ROUTING
+var router = express.Router();
+
+router.post('/sms/inbound', function(req, res) {
+    var messageBody = req.body.Body;
+    addMessageToFirebase(messageBody);
+    res.json({ message: 'successful response' });
+});
+
+app.use('/api/v1', router);
+
+app.listen(port);
+console.log('Magic happens on port ' + port);
