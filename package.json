@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "firebase": "^3.6.4",
+    "pm2": "^2.2.3",
     "twilio": "^2.11.1"
   }
 }
