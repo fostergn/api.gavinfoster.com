@@ -25,6 +25,7 @@ db.ref('messages')
   const messageText = data.val().message;
   const messageAuthor = data.val().author;
 
+  // only send messages from client
   if(messageAuthor === 'admin'){return;}
 
   // check if admin is active
@@ -39,17 +40,21 @@ db.ref('messages')
 });
 
 function sendMessage(msg){
+  console.log('sending message : ', msg);
   twilioClient.sendMessage({
       to:'+17032548467', //
-      from: '+17032935276', // A number you bought from Twilio and can use for outbound communication
+      from: '+17032935276', // Twilio Number
       body: msg
   }, function(err, responseData) { //this function is executed when a response is received from Twilio
       if(err){console.log('error: ', err)}
+      console.log('response: ', responseData);
   });
 }
 
 function addMessageToFirebase(message){
+  console.log('adding message to firebase: ', message);
   sendWithConversationId(function(conversationId){
+    console.log('sending w/ convo id: ', conversationId);
     db.ref('messages').push({
       author: 'admin',
       message,
@@ -71,10 +76,12 @@ function sendWithConversationId(cb){
       .then(function(messages) {
         messages.forEach(function(message) {
           conversationId = message.val().conversationId;
+          console.log('converation id has not been set: ', conversationId);
           cb(conversationId);
         });
       });
   } else {
+    console.log('conversation id exists: ', converesationId);
     cb(conversationId);
   }
 }
