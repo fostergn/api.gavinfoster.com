@@ -69,6 +69,7 @@ function addMessageToFirebase(message){
 
 function sendWithConversationId(conversationId, cb){
   // if conversation id hasn't been set
+  console.log('running send with conversation');
   if (conversationId === '' || (typeof conversationId === 'undefined')){
     db.ref('messages')
       .orderByChild('createdOn')
@@ -82,7 +83,7 @@ function sendWithConversationId(conversationId, cb){
         });
       });
   } else {
-    console.log('conversation id exists: ', converesationId);
+    console.log('conversation id exists: ', conversationId);
     cb(conversationId);
   }
 }
