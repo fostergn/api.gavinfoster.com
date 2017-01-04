@@ -68,7 +68,7 @@ function addMessageToFirebase(message){
 
 function sendWithConversationId(cb){
   // if conversation id hasn't been set
-  if (conversationId === ''){
+  if (conversationId === '' || (typeof conversationId === 'undefined')){
     db.ref('messages')
       .orderByChild('createdOn')
       .limitToLast(1)
