@@ -28,12 +28,15 @@ db.ref('messages')
   // only send messages from client
   if(messageAuthor === 'admin'){return;}
 
+  console.log('child added from firebase : ', messageText);
+
   // check if admin is active
   db.ref('conversations/' + conversationId)
     .once('value')
     .then(function(conversation) {
       const isAdminConnected = conversation.val().isAdminConnected;
       if(!isAdminConnected){
+        console.log('once send: ', messageText);
         sendMessage(messageText);
       }
     });
@@ -94,7 +97,6 @@ var router = express.Router();
 router.post('/sms/inbound', function(req, res) {
     var messageBody = req.body.Body;
     addMessageToFirebase(messageBody);
-    // res.json({ message: 'successful response' });
     res.status(204).header('Content-Type','text/xml').send();
 });
 
