@@ -1,5 +1,4 @@
 #!/usr/bin/env nodejs
-
 var twilioConfig = require('./twilioConfig');
 var twilioClient = require('twilio')(twilioConfig.accountSid, twilioConfig.authToken);
 var express = require('express');
