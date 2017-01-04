@@ -53,6 +53,7 @@ function sendMessage(msg){
 
 function addMessageToFirebase(message){
   console.log('adding message to firebase: ', message);
+  console.log('adding message to firebase with conversation id: ', conversationId);
   sendWithConversationId(function(conversationId){
     console.log('sending w/ convo id: ', conversationId);
     db.ref('messages').push({
