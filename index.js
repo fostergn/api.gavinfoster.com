@@ -45,10 +45,10 @@ db.ref('messages')
 function sendMessage(msg){
   console.log('sending message : ', msg);
   twilioClient.sendMessage({
-      to:'+17032548467', //
-      from: '+17032935276', // Twilio Number
+      to:'+17032548467',
+      from: '+17032935276',
       body: msg
-  }, function(err, responseData) { //this function is executed when a response is received from Twilio
+  }, function(err, responseData) { 
       if(err){console.log('error: ', err)}
       console.log('response: ', responseData);
   });
