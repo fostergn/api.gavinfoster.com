@@ -54,7 +54,7 @@ function sendMessage(msg){
 function addMessageToFirebase(message){
   console.log('adding message to firebase: ', message);
   console.log('adding message to firebase with conversation id: ', conversationId);
-  sendWithConversationId(function(conversationId){
+  sendWithConversationId(conversationId, function(){
     console.log('sending w/ convo id: ', conversationId);
     db.ref('messages').push({
       author: 'admin',
@@ -67,7 +67,7 @@ function addMessageToFirebase(message){
   })
 }
 
-function sendWithConversationId(cb){
+function sendWithConversationId(conversationId, cb){
   // if conversation id hasn't been set
   if (conversationId === '' || (typeof conversationId === 'undefined')){
     db.ref('messages')
