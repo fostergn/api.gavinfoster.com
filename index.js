@@ -1,9 +1,4 @@
-// connect to firebase
-
-// listen to any new incoming message
-
-// check if admin is connected
-// if not, then send SMS message
+#!/usr/bin/env nodejs
 
 var twilioConfig = require('./twilioConfig');
 var twilioClient = require('twilio')(twilioConfig.accountSid, twilioConfig.authToken);
