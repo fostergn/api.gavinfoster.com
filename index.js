@@ -95,7 +95,7 @@ router.post('/sms/inbound', function(req, res) {
     var messageBody = req.body.Body;
     addMessageToFirebase(messageBody);
     // res.json({ message: 'successful response' });
-    res.status(200).header('Content-Type','text/xml').send();
+    res.status(204).header('Content-Type','text/xml').send();
 });
 
 app.use('/api/v1', router);
