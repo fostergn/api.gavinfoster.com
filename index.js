@@ -28,37 +28,30 @@ db.ref('messages')
   // only send messages from client
   if(messageAuthor === 'admin'){return;}
 
-  console.log('child added from firebase : ', messageText);
-
   // check if admin is active
   db.ref('conversations/' + conversationId)
     .once('value')
     .then(function(conversation) {
       const isAdminConnected = conversation.val().isAdminConnected;
       if(!isAdminConnected){
-        console.log('once send: ', messageText);
         sendMessage(messageText);
       }
     });
 });
 
 function sendMessage(msg){
-  console.log('sending message : ', msg);
   twilioClient.sendMessage({
       to:'+17032548467',
       from: '+17032935276',
       body: msg
-  }, function(err, responseData) { 
+  }, function(err, responseData) {
       if(err){console.log('error: ', err)}
       console.log('response: ', responseData);
   });
 }
 
 function addMessageToFirebase(message){
-  console.log('adding message to firebase: ', message);
-  console.log('adding message to firebase with conversation id: ', conversationId);
   sendWithConversationId(conversationId, function(){
-    console.log('sending w/ convo id: ', conversationId);
     db.ref('messages').push({
       author: 'admin',
       message,
