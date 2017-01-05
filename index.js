@@ -93,7 +93,7 @@ router.post('/sms/inbound', function(req, res) {
     res.status(204).header('Content-Type','text/xml').send();
 });
 
-app.use('/api/v1', router);
+app.use('/v1', router);
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
