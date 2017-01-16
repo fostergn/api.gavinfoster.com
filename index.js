@@ -40,10 +40,11 @@ db.ref('messages')
 });
 
 function sendMessage(msg){
+  let msgTxt = msg.startsWith('data:') ? 'client sent image' : msg;
   twilioClient.sendMessage({
       to:'+17032548467',
       from: '+17032935276',
-      body: msg
+      body: msgTxt
   }, function(err, responseData) {
       if(err){console.log('error: ', err)}
       console.log('response: ', responseData);
