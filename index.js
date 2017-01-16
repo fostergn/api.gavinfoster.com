@@ -46,7 +46,7 @@ function sendMessage(msg){
       to:'+17032548467',
       from: '+17032935276',
       body: msgTxt,
-      MediaUrl: msgMediaUrl,
+      mediaUrl: msgMediaUrl,
   }, function(err, responseData) {
       if(err){console.log('error: ', err)}
       console.log('response: ', responseData);
