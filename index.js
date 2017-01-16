@@ -40,10 +40,13 @@ db.ref('messages')
 });
 
 function sendMessage(msg){
+  const msgTxt = msg.startsWith('data:') ? 'Client sent an image.' : msg;
+  const msgMediaUrl = msg.startsWith('data:') ? msg : '';
   twilioClient.sendMessage({
       to:'+17032548467',
       from: '+17032935276',
-      body: msg
+      body: msgTxt,
+      MediaUrl: msgMediaUrl,
   }, function(err, responseData) {
       if(err){console.log('error: ', err)}
       console.log('response: ', responseData);
